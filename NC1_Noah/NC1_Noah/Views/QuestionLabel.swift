@@ -80,7 +80,6 @@ struct QuestionLabel: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink{
                     Text("채점 결과")
-                        .navigationBarBackButtonHidden(true)
 //                    채점 결과 뷰에서 테스트 뷰로 네비게이션 링크하기
                 } label: {
                     Image(systemName: "arrow.up")
