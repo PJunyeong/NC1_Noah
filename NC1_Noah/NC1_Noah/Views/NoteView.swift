@@ -20,6 +20,7 @@ struct NoteView: View {
                 })
                 .pickerStyle(SegmentedPickerStyle())
                 .clipShape(RoundedRectangle(cornerRadius: 10))
+                .padding(10)
                 
                 List{
                     ForEach(buttonLabels[selectedIndex], id: \.self) { buttonLabel in
@@ -39,7 +40,6 @@ struct NoteView: View {
             }
             .navigationTitle(Text("오답노트"))
             .navigationBarTitleDisplayMode(.large)
-            .font(.largeTitle)
         }
     }
 }

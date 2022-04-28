@@ -20,7 +20,7 @@ struct TestView: View {
                 })
                 .pickerStyle(SegmentedPickerStyle())
                 .clipShape(RoundedRectangle(cornerRadius: 10))
-                .padding(20)
+                .padding(10)
 
                 VStack{
                     ForEach(buttonLabels[selectedIndex], id: \.self) { buttonLabel in
