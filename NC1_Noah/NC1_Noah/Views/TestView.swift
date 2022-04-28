@@ -20,12 +20,12 @@ struct TestView: View {
                 })
                 .pickerStyle(SegmentedPickerStyle())
                 .clipShape(RoundedRectangle(cornerRadius: 10))
-                .padding(10)
+                .padding(5)
 
                 VStack{
                     ForEach(buttonLabels[selectedIndex], id: \.self) { buttonLabel in
                         NavigationLink {
-                            Text("문제 푸는 곳")
+                            QuestionLabel()
                         } label: {
                             TestButtonLabel(buttonName: buttonLabel)
                         }
