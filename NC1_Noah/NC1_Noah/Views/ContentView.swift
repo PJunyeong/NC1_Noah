@@ -1,0 +1,31 @@
+//
+//  ContentView.swift
+//  NC1_Noah
+//
+//  Created by Junyeong Park on 2022/04/28.
+//
+
+import SwiftUI
+
+struct ContentView: View {
+    var body: some View {
+        TabView{
+            TestView()
+                .tabItem({Image(systemName: "square.and.pencil")
+                    Text("학습")})
+            NoteView()
+                .tabItem({Image(systemName: "newspaper")
+                    Text("오답노트")})
+            ScoreView()
+                .tabItem({Image(systemName: "chart.line.uptrend.xyaxis")
+                    Text("점수")})
+        }
+        .tint(Color.accentColor)
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
