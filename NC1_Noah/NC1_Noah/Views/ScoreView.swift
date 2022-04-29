@@ -55,7 +55,6 @@ struct ScoreView: View {
             }
             .listStyle(.inset)
         }
-        .navigationTitle(Text("점수"))
         .navigationBarTitleDisplayMode(.large)
     }
 }

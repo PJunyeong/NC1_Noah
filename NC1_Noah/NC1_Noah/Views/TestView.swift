@@ -19,7 +19,7 @@ struct TestView: View {
             })
             .pickerStyle(SegmentedPickerStyle())
             .clipShape(RoundedRectangle(cornerRadius: 10))
-            .padding(5)
+            .padding(10)
             
             VStack{
                 ForEach(buttonLabels[selectedIndex], id: \.self) { buttonLabel in
@@ -32,7 +32,6 @@ struct TestView: View {
             }
             Spacer()
         }
-        .navigationTitle(Text("학습"))
         .navigationBarTitleDisplayMode(.large)
         .font(.largeTitle)
     }

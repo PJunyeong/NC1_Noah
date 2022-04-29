@@ -41,7 +41,6 @@ struct NoteView: View {
             }
             .listStyle(.inset)
         }
-        .navigationTitle(Text("오답노트"))
         .navigationBarTitleDisplayMode(.large)
     }
 }
