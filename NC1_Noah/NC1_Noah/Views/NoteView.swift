@@ -11,36 +11,34 @@ struct NoteView: View {
     @State private var selectedIndex = 0
     let buttonLabels = [["10회", "20회", "30회", "40회", "50회"], ["10회", "20회", "30회", "40회", "50회"]]
     var body: some View {
-        NavigationView{
-            VStack{
-                Picker("오답노트", selection: $selectedIndex, content: {
-                    Text("오답")
-                        .tag(0)
-                    Text("책갈피").tag(1)
-                })
-                .pickerStyle(SegmentedPickerStyle())
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .padding(10)
-                
-                List{
-                    ForEach(buttonLabels[selectedIndex], id: \.self) { buttonLabel in
-                        Section(header: Text(buttonLabel)
-                        ){
-                            ForEach(buttonLabels[0], id: \.self){
-                                buttonLabel in
-                                NavigationLink {
-                                    Text("문제 푸는 곳")
-                                } label: {
-                                    Text(buttonLabel)
-                                }
+        VStack{
+            Picker("오답노트", selection: $selectedIndex, content: {
+                Text("오답")
+                    .tag(0)
+                Text("책갈피").tag(1)
+            })
+            .pickerStyle(SegmentedPickerStyle())
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .padding(10)
+            
+            List{
+                ForEach(buttonLabels[selectedIndex], id: \.self) { buttonLabel in
+                    Section(header: Text(buttonLabel)
+                    ){
+                        ForEach(buttonLabels[0], id: \.self){
+                            buttonLabel in
+                            NavigationLink {
+                                Text("문제 푸는 곳")
+                            } label: {
+                                Text(buttonLabel)
                             }
                         }
                     }
                 }
             }
-            .navigationTitle(Text("오답노트"))
-            .navigationBarTitleDisplayMode(.large)
         }
+        .navigationTitle(Text("오답노트"))
+        .navigationBarTitleDisplayMode(.large)
     }
 }
 struct NoteView_Previews: PreviewProvider {

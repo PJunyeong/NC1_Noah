@@ -9,18 +9,20 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        TabView{
-            TestView()
-                .tabItem({Image(systemName: "square.and.pencil")
-                    Text("학습")}).tag("학습")
-            NoteView()
-                .tabItem({Image(systemName: "newspaper")
-                    Text("오답노트")}).tag("오답노트")
-            ScoreView()
-                .tabItem({Image(systemName: "chart.line.uptrend.xyaxis")
-                    Text("점수")}).tag("점수")
+        NavigationView{
+            TabView{
+                TestView()
+                    .tabItem({Image(systemName: "square.and.pencil")
+                        Text("학습")}).tag("학습")
+                NoteView()
+                    .tabItem({Image(systemName: "newspaper")
+                        Text("오답노트")}).tag("오답노트")
+                ScoreView()
+                    .tabItem({Image(systemName: "chart.line.uptrend.xyaxis")
+                        Text("점수")}).tag("점수")
+            }
+            .tint(Color.accentColor)
         }
-        .tint(Color.accentColor)
     }
 }
 
