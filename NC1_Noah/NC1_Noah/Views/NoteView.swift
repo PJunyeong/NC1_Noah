@@ -23,7 +23,9 @@ struct NoteView: View {
             
             List{
                 ForEach(buttonLabels[selectedIndex], id: \.self) { buttonLabel in
-                    Section(header: Text(buttonLabel).foregroundColor(.accentColor)
+                    Section(header: Text(buttonLabel)
+                        .foregroundColor(.accentColor)
+                        .font(.headline)
                     ){
                         ForEach(buttonLabels[0], id: \.self){
                             buttonLabel in
@@ -31,6 +33,7 @@ struct NoteView: View {
                                 Text("문제 푸는 곳")
                             } label: {
                                 Text(buttonLabel)
+                                    .font(.body)
                             }
                         }
                     }

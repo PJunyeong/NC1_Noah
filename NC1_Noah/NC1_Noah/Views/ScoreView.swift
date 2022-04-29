@@ -37,7 +37,9 @@ struct ScoreView: View {
             
             List{
                 ForEach(buttonLabels[selectedIndex], id: \.self) { buttonLabel in
-                    Section(header: Text(buttonLabel).foregroundColor(.accentColor)
+                    Section(header: Text(buttonLabel)
+                        .foregroundColor(.accentColor)
+                        .font(.headline)
                     ){
                         ForEach(buttonLabels[selectedIndex], id: \.self){
                             buttonLabel in
@@ -45,6 +47,7 @@ struct ScoreView: View {
                                 Text("문제 해설")
                             } label: {
                                 Text(buttonLabel)
+                                    .font(.body)
                             }
                         }
                     }
