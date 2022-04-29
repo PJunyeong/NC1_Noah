@@ -23,7 +23,7 @@ struct NoteView: View {
             
             List{
                 ForEach(buttonLabels[selectedIndex], id: \.self) { buttonLabel in
-                    Section(header: Text(buttonLabel)
+                    Section(header: Text(buttonLabel).foregroundColor(.accentColor)
                     ){
                         ForEach(buttonLabels[0], id: \.self){
                             buttonLabel in
@@ -36,6 +36,7 @@ struct NoteView: View {
                     }
                 }
             }
+            .listStyle(.inset)
         }
         .navigationTitle(Text("오답노트"))
         .navigationBarTitleDisplayMode(.large)
