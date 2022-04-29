@@ -14,6 +14,7 @@ struct QuestionLabel: View {
     @State private var isEditing = false
     @State private var isBookmarked = false
     @State private var showingAlert = false
+    @State private var showingSubmit = false
     var body: some View {
         VStack{
             Slider(value: $questionNum,
@@ -40,11 +41,12 @@ struct QuestionLabel: View {
                     .foregroundColor(.gray)
                 Text("'주문'의 한자 표기가 바른 것은?")
                     .font(.title)
+                Image(systemName: "pencil")
+                    .resizable()
+                    .frame(width: 200, height: 200, alignment: .leading)
+                // 지문형 문제일 때 마크다운 뷰로 보기 띄우기
+                // 북마크와 인포메이션 버튼
                 VStack(alignment: .trailing){
-                    Image(systemName: "pencil")
-                        .resizable()
-                        .frame(width: 200, height: 200, alignment: .leading)
-//                  지문형 문제일 때 마크다운 뷰로 보기 띄우기
                     HStack(alignment: .center){
                         Button(action: {
                             self.isBookmarked.toggle()
@@ -59,8 +61,6 @@ struct QuestionLabel: View {
                             .frame(width:30, height:30, alignment: .trailing)
                             .foregroundColor(.accentColor)
                     }
-//                  북마크와 인포메이션 버튼
-                }
                 List{
                     ForEach(examples, id: \.self) {
                         example in
@@ -71,7 +71,7 @@ struct QuestionLabel: View {
                     }
                     .listRowBackground(Color.gray.opacity(0.2))
 //                   selected된 리스트 아이템에 백그라운드 색 변경.
-                }
+                }}
                 .listStyle(.plain)
                 .padding(.horizontal, 40)
             }
