@@ -32,8 +32,6 @@ struct TestView: View {
             }
             Spacer()
         }
-        .navigationBarTitleDisplayMode(.large)
-        .font(.largeTitle)
     }
 }
 

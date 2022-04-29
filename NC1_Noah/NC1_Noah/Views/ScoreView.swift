@@ -55,7 +55,6 @@ struct ScoreView: View {
             }
             .listStyle(.inset)
         }
-        .navigationBarTitleDisplayMode(.large)
     }
 }
 

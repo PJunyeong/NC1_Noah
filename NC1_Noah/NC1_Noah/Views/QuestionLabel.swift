@@ -9,9 +9,11 @@ import SwiftUI
 
 struct QuestionLabel: View {
     let examples = ["1번: ##", "2번: ##", "3번: ##", "4번: ##"]
+    @Environment(\.dismiss) var dismiss
     @State private var questionNum = 1.0
     @State private var isEditing = false
     @State private var isBookmarked = false
+    @State private var showingAlert = false
     var body: some View {
         VStack{
             Slider(value: $questionNum,
@@ -74,9 +76,21 @@ struct QuestionLabel: View {
                 .padding(.horizontal, 40)
             }
         }
+        .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(Text("제10회 한자인증시험"))
         .toolbar {
+            ToolbarItem(placement: .navigationBarLeading){
+                Button(action: {
+                    self.showingAlert.toggle()
+                    //                    dismiss()
+                }, label: {
+                    Image(systemName: "delete.backward")
+                        .alert(isPresented: $showingAlert){
+                            Alert(title: Text("경고"), message: Text("제출하지 않으면 지금까지 푼 문제가 사라져요!"), primaryButton: .destructive(Text("돌아갈래요!"), action: {dismiss()}), secondaryButton: .cancel(Text("좀 더 생각해볼게요")))
+                        }
+                })
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink{
                     Text("채점 결과")

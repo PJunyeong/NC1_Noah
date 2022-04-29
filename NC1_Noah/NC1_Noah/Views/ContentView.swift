@@ -46,6 +46,8 @@ struct ContentView: View {
             }
             .tint(Color.accentColor)
             .navigationTitle(tabSelected.title)
+            .navigationBarTitleDisplayMode(.large)
+            .font(.largeTitle)
         }
     }
 }

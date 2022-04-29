@@ -41,7 +41,6 @@ struct NoteView: View {
             }
             .listStyle(.inset)
         }
-        .navigationBarTitleDisplayMode(.large)
     }
 }
 struct NoteView_Previews: PreviewProvider {
