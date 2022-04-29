@@ -15,6 +15,7 @@ struct QuestionLabel: View {
     @State private var isBookmarked = false
     @State private var showingAlert = false
     @State private var showingSubmit = false
+    @State private var showingView = false
     var body: some View {
         VStack{
             Slider(value: $questionNum,
@@ -92,11 +93,16 @@ struct QuestionLabel: View {
                 })
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink{
-                    Text("채점 결과")
-//                    채점 결과 뷰에서 테스트 뷰로 네비게이션 링크하기
-                } label: {
+                NavigationLink(destination: Text("채점 결과"), isActive: $showingView){
+                    EmptyView()
+                Button(action: {
+                    self.showingSubmit.toggle()
+                }, label: {
                     Image(systemName: "arrow.up")
+                        .alert(isPresented: $showingSubmit){
+                            Alert(title: Text("제출"), message: Text("모든 문제를 푸셨군요! 제출하시겠습니까?"), primaryButton: .default(Text("제출할게요!"), action: {self.showingView = true}), secondaryButton: .cancel(Text("좀 더 생각해볼게요!")))
+                        }
+                })
                 }
             }
         }
