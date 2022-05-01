@@ -9,7 +9,10 @@ import SwiftUI
 
 
 struct ContentView: View {
+    @State var flag: Bool
     init() {
+    UserDefaults.standard.set(false, forKey: "CheckDB")
+    flag = CheckDB()
     UITabBar.appearance().backgroundColor = UIColor.white
     }
     enum Tab{
@@ -27,7 +30,6 @@ struct ContentView: View {
     }
     @State var tabSelected = Tab.first
 //  탭별 네비게이션 타이틀 변경을 위한 Enum 선언
-    
     var body: some View {
         NavigationView{
             TabView(selection: $tabSelected){

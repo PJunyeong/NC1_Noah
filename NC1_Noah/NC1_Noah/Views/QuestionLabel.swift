@@ -16,6 +16,7 @@ struct QuestionLabel: View {
     @State private var showingAlert = false
     @State private var showingSubmit = false
     @State private var showingView = false
+    @Binding var rootIsActive: Bool
     var body: some View {
         VStack{
             Slider(value: $questionNum,
@@ -84,17 +85,21 @@ struct QuestionLabel: View {
             ToolbarItem(placement: .navigationBarLeading){
                 Button(action: {
                     self.showingAlert.toggle()
-                    //                    dismiss()
                 }, label: {
                     Image(systemName: "delete.backward")
                         .alert(isPresented: $showingAlert){
-                            Alert(title: Text("경고"), message: Text("제출하지 않으면 지금까지 푼 문제가 사라져요!"), primaryButton: .destructive(Text("돌아갈래요!"), action: {dismiss()}), secondaryButton: .cancel(Text("좀 더 생각해볼게요")))
+                            Alert(title: Text("경고"), message: Text("제출하지 않으면 지금까지 푼 문제가 사라져요!"), primaryButton: .destructive(Text("돌아갈래요!"), action: {
+                                dismiss()
+                            }), secondaryButton: .cancel(Text("좀 더 생각해볼게요")))
                         }
                 })
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: Text("채점 결과"), isActive: $showingView){
-                    EmptyView()
+                NavigationLink(
+                    destination: ScoreDetailView(shouldPopToRootView: self.$rootIsActive),
+                    isActive: $showingView)
+                {
+                EmptyView()
                 Button(action: {
                     self.showingSubmit.toggle()
                 }, label: {
@@ -109,8 +114,8 @@ struct QuestionLabel: View {
     }
 }
 
-struct QuestionLabel_Previews: PreviewProvider {
-    static var previews: some View {
-        QuestionLabel()
-    }
-}
+//struct QuestionLabel_Previews: PreviewProvider {
+//    static var previews: some View {
+//        QuestionLabel()
+//    }
+//}

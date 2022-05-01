@@ -44,7 +44,8 @@ struct ScoreView: View {
                         ForEach(buttonLabels[selectedIndex], id: \.self){
                             buttonLabel in
                             NavigationLink {
-                                Text("문제 해설")
+                                Text("점수 채점")
+//                                ScoreDetailView()
                             } label: {
                                 Text(buttonLabel)
                                     .font(.body)

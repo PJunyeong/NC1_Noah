@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A20C1A3281E2E6E0055A035 /* CreateDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A20C1A2281E2E6E0055A035 /* CreateDB.swift */; };
+		4A20C1A5281E2EC40055A035 /* CheckDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A20C1A4281E2EC40055A035 /* CheckDB.swift */; };
 		4A96BF23281A1A6B00D4DC9B /* NC1_NoahApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A96BF22281A1A6B00D4DC9B /* NC1_NoahApp.swift */; };
 		4A96BF25281A1A6B00D4DC9B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A96BF24281A1A6B00D4DC9B /* ContentView.swift */; };
 		4A96BF27281A1A6C00D4DC9B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A96BF26281A1A6C00D4DC9B /* Assets.xcassets */; };
@@ -18,9 +20,12 @@
 		4A96BF3A281A30C600D4DC9B /* QuestionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A96BF39281A30C600D4DC9B /* QuestionLabel.swift */; };
 		4A96BF3C281A30CE00D4DC9B /* AnswerLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A96BF3B281A30CE00D4DC9B /* AnswerLabel.swift */; };
 		4A96BF41281A3DAF00D4DC9B /* TestButtonLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A96BF40281A3DAF00D4DC9B /* TestButtonLabel.swift */; };
+		4AAF50BD281BDD7700669344 /* ScoreDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AAF50BC281BDD7700669344 /* ScoreDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4A20C1A2281E2E6E0055A035 /* CreateDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDB.swift; sourceTree = "<group>"; };
+		4A20C1A4281E2EC40055A035 /* CheckDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDB.swift; sourceTree = "<group>"; };
 		4A96BF1F281A1A6B00D4DC9B /* NC1_Noah.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NC1_Noah.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A96BF22281A1A6B00D4DC9B /* NC1_NoahApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NC1_NoahApp.swift; sourceTree = "<group>"; };
 		4A96BF24281A1A6B00D4DC9B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -33,6 +38,7 @@
 		4A96BF39281A30C600D4DC9B /* QuestionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionLabel.swift; sourceTree = "<group>"; };
 		4A96BF3B281A30CE00D4DC9B /* AnswerLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerLabel.swift; sourceTree = "<group>"; };
 		4A96BF40281A3DAF00D4DC9B /* TestButtonLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestButtonLabel.swift; sourceTree = "<group>"; };
+		4AAF50BC281BDD7700669344 /* ScoreDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +52,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4A20C1A6281E2ECD0055A035 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				4A20C1A2281E2E6E0055A035 /* CreateDB.swift */,
+				4A20C1A4281E2EC40055A035 /* CheckDB.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
 		4A96BF16281A1A6B00D4DC9B = {
 			isa = PBXGroup;
 			children = (
@@ -92,6 +107,8 @@
 				4A96BF39281A30C600D4DC9B /* QuestionLabel.swift */,
 				4A96BF3B281A30CE00D4DC9B /* AnswerLabel.swift */,
 				4A96BF40281A3DAF00D4DC9B /* TestButtonLabel.swift */,
+				4AAF50BC281BDD7700669344 /* ScoreDetailView.swift */,
+				4A20C1A6281E2ECD0055A035 /* Utility */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -168,10 +185,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A96BF34281A308D00D4DC9B /* TestView.swift in Sources */,
+				4A20C1A3281E2E6E0055A035 /* CreateDB.swift in Sources */,
 				4A96BF3C281A30CE00D4DC9B /* AnswerLabel.swift in Sources */,
 				4A96BF25281A1A6B00D4DC9B /* ContentView.swift in Sources */,
+				4A20C1A5281E2EC40055A035 /* CheckDB.swift in Sources */,
 				4A96BF3A281A30C600D4DC9B /* QuestionLabel.swift in Sources */,
 				4A96BF41281A3DAF00D4DC9B /* TestButtonLabel.swift in Sources */,
+				4AAF50BD281BDD7700669344 /* ScoreDetailView.swift in Sources */,
 				4A96BF36281A30A300D4DC9B /* NoteView.swift in Sources */,
 				4A96BF23281A1A6B00D4DC9B /* NC1_NoahApp.swift in Sources */,
 				4A96BF38281A30AE00D4DC9B /* ScoreView.swift in Sources */,
