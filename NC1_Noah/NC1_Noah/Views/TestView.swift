@@ -26,12 +26,10 @@ struct TestView: View {
             VStack{
                 ForEach(buttonLabels[selectedIndex], id: \.self) { buttonLabel in
                     NavigationLink(
-                        destination: QuestionLabel(rootIsActive: self.$isActive),
-                        isActive: self.$isActive)
+                        destination: QuestionLabel())
                     {
                         TestButtonLabel(buttonName: buttonLabel)
                     }
-                    .isDetailLink(false)
                 }
             }
             Spacer()

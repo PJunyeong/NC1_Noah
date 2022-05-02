@@ -9,11 +9,9 @@ import SwiftUI
 
 
 struct ContentView: View {
-    @State var flag: Bool
     init() {
-    UserDefaults.standard.set(false, forKey: "CheckDB")
-    flag = CheckDB()
     UITabBar.appearance().backgroundColor = UIColor.white
+        _ = DBHelper()
     }
     enum Tab{
         case first

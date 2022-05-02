@@ -16,7 +16,6 @@ struct QuestionLabel: View {
     @State private var showingAlert = false
     @State private var showingSubmit = false
     @State private var showingView = false
-    @Binding var rootIsActive: Bool
     var body: some View {
         VStack{
             Slider(value: $questionNum,
@@ -43,9 +42,10 @@ struct QuestionLabel: View {
                     .foregroundColor(.gray)
                 Text("'주문'의 한자 표기가 바른 것은?")
                     .font(.title)
-                Image(systemName: "pencil")
-                    .resizable()
-                    .frame(width: 200, height: 200, alignment: .leading)
+                ScrollView{
+                    Text("")
+                    .padding(.leading, 5)
+                }.frame(width:300, height: 250)
                 // 지문형 문제일 때 마크다운 뷰로 보기 띄우기
                 // 북마크와 인포메이션 버튼
                 VStack(alignment: .trailing){
@@ -68,7 +68,6 @@ struct QuestionLabel: View {
                         example in
                         Text(example)
                             .font(.title)
-                            .padding(.bottom, 10)
                             .foregroundColor(.accentColor)
                     }
                     .listRowBackground(Color.gray.opacity(0.2))
@@ -96,7 +95,7 @@ struct QuestionLabel: View {
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink(
-                    destination: ScoreDetailView(shouldPopToRootView: self.$rootIsActive),
+                    destination: ScoreDetailView(),
                     isActive: $showingView)
                 {
                 EmptyView()
@@ -114,8 +113,8 @@ struct QuestionLabel: View {
     }
 }
 
-//struct QuestionLabel_Previews: PreviewProvider {
-//    static var previews: some View {
-//        QuestionLabel()
-//    }
-//}
+struct QuestionLabel_Previews: PreviewProvider {
+    static var previews: some View {
+        QuestionLabel()
+    }
+}

@@ -8,19 +8,25 @@
 import SwiftUI
 
 struct ScoreDetailView: View {
-    @Binding var shouldPopToRootView: Bool
     var body: some View {
         VStack{
             Text("hello, world!")
-            Button(action: {self.shouldPopToRootView = false}){
+            Button(action: {
+                UserDefaults.standard.set(false, forKey: "checkDatabase")
+                let dbHelper = DBHelper()
+                let questions = dbHelper.selectTest(testNum: 10)
+                for question in questions{
+                    print(question)
+                }
+            }){
                 Text("Pop to Root")
             }
         }
     }
 }
-//
-//struct ScoreDetailView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ScoreDetailView(shouldPopToRootView:)
-//    }
-//}
+
+struct ScoreDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        ScoreDetailView()
+    }
+}
