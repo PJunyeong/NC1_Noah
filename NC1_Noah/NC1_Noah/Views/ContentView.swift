@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     init() {
+    setData()
     UITabBar.appearance().backgroundColor = UIColor.white
     }
     enum Tab{

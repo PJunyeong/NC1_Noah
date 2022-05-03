@@ -15,6 +15,7 @@ func setData()->Void{
     getTest()
     getBookmarks()
     getBoxes()
+    print("Set data successfully activated")
 }
 
 func getTest()->Void{
@@ -34,3 +35,18 @@ func getBoxes()->Void{
     boxes = dbHelper.selectBox()
     return
 }
+
+func matchBox(testNum:Int, number:Int, order:Int)->String{
+    if order == 0{
+        return ""
+    } else{
+        let data = boxes.filter({$0.testNum == testNum && $0.order == order})
+        if data.isEmpty == false{
+            return data[0].box
+        } else{
+            return ""
+        }
+    }
+}
+
+

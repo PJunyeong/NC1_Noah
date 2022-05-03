@@ -11,6 +11,8 @@ struct TestView: View {
     @State private var selectedIndex = 0
     @State private var selectedQuestionCnt = 10
     @State var confirmationDialog:Bool = false
+    @State var TypeActive:Bool = false
+    @State var linkTag:Int? = nil
     let buttonLabels = [["10회", "20회", "30회", "40회", "50회"], ["유형1", "유형2", "유형3", "유형4", "유형5", "유형6"]]
     var body: some View {
         VStack(spacing:50){
@@ -24,28 +26,42 @@ struct TestView: View {
             .padding(10)
             .onChange(of: selectedIndex) {tag in
                 if tag == 0{
-                    self.confirmationDialog = false
+                    self.TypeActive = false
                 } else{
-                    self.confirmationDialog = true
+                    self.TypeActive = true
                 }
             }
             
-            VStack{
-                ForEach(buttonLabels[selectedIndex], id: \.self) { buttonLabel in
-                    NavigationLink(
-                        destination: QuestionLabel())
-                    {
-                        TestButtonLabel(buttonName: buttonLabel)
-                            .confirmationDialog("문제 개수 선택", isPresented: $confirmationDialog){
-                                Button("10개", role: .destructive, action: {self.selectedQuestionCnt = 10})
-                                Button("25개", role: .destructive, action: {
-                                    self.selectedQuestionCnt = 25
-                                })
-                                Button("50개", role: .destructive, action: {
-                                    self.selectedQuestionCnt = 50
-                                })
-                                Button("돌아가기", role: .cancel, action: {})
+            ZStack{
+                NavigationLink(destination: QuestionLabel(), tag:1, selection: $linkTag){
+                    EmptyView()
+                }
+//              버튼 눌러서 네비게이션 링크
+                VStack{
+                    ForEach(buttonLabels[selectedIndex], id: \.self) { buttonLabel in
+                        Button(action: {
+                            if self.TypeActive == true{
+                                confirmationDialog = true
+                                print("confirm!")
+                            } else{
+                                self.linkTag = 1
                             }
+                        }) { TestButtonLabel(buttonName:buttonLabel)
+                                .confirmationDialog("문제 개수 선택", isPresented: $confirmationDialog){
+                                    Button("10개", role: .destructive, action: {self.selectedQuestionCnt = 10
+                                        self.linkTag = 1
+                                    })
+                                    Button("25개", role: .destructive, action: {
+                                        self.selectedQuestionCnt = 25
+                                        self.linkTag = 1
+                                    })
+                                    Button("50개", role: .destructive, action: {
+                                        self.selectedQuestionCnt = 50
+                                        self.linkTag = 1
+                                    })
+                                    Button("돌아가기", role: .cancel, action: {})
+                                }
+                        }
                     }
                 }
             }

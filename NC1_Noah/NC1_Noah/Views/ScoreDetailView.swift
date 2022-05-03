@@ -12,12 +12,6 @@ struct ScoreDetailView: View {
         VStack{
             Text("hello, world!")
             Button(action: {
-                UserDefaults.standard.set(false, forKey: "checkDatabase")
-                let dbHelper = DBHelper()
-                let questions = dbHelper.selectAll()
-                for question in questions{
-                    print(question)
-                }
             }){
                 Text("Pop to Root")
             }
