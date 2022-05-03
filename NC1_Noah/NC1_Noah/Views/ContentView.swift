@@ -11,7 +11,6 @@ import SwiftUI
 struct ContentView: View {
     init() {
     UITabBar.appearance().backgroundColor = UIColor.white
-        _ = DBHelper()
     }
     enum Tab{
         case first

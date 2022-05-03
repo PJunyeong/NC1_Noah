@@ -2,7 +2,7 @@
 //  questionBox.swift
 //  NC1_Noah
 //
-//  Created by Junyeong Park on 2022/05/02.
+//  Created by Junyeong Park on 2022/05/03.
 //
 
 import Foundation
