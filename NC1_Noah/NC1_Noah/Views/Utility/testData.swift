@@ -49,4 +49,22 @@ func matchBox(testNum:Int, number:Int, order:Int)->String{
     }
 }
 
-
+func getTestSet(isTest:Bool, testNum:Int, type:Int, questionCnt:Int)->[questions]{
+    if isTest == true{
+        var testSet = test.filter({$0.testNum == testNum})
+        testSet.sort(by: {$0.number < $1.number})
+        return testSet
+    } else{
+        let typeSet = test.filter({$0.type == type})
+        var testSet = [questions]()
+        while testSet.count != questionCnt{
+            let testCase = typeSet.randomElement()!
+            if testSet.contains{$0.testNum == testCase.testNum && $0.number == testCase.number} == true{
+                continue
+            } else{
+                testSet.append(testCase)
+            }
+        }
+        return testSet
+    }
+}

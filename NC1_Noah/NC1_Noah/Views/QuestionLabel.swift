@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct QuestionLabel: View {
+    var isTest:Bool = true
+    var testNum:Int = 10
+    var type:Int = 1
+    var questionCnt:Int = 30
+    
     let examples = ["1번: ##", "2번: ##", "3번: ##", "4번: ##"]
     @Environment(\.dismiss) var dismiss
     @State private var questionNum = 1.0
@@ -19,23 +24,24 @@ struct QuestionLabel: View {
     var body: some View {
         VStack{
             Slider(value: $questionNum,
-                   in: 1...100,
+                   in: 1...Double(questionCnt),
                    step: 1
             ) {
                 Text("Speed")
             } minimumValueLabel: {
                 Text("1")
             } maximumValueLabel: {
-                Text("100")
+                Text("\(questionCnt)")
             } onEditingChanged: { editing in
                 isEditing = editing
             }
             .padding(.horizontal, 40)
-            Text("\(Int(questionNum)) / 100")
+            Text("\(Int(questionNum)) / \(Int(questionCnt))")
                 .foregroundColor(.accentColor)
                 .font(.headline)
                 .padding(.bottom, 10)
 //          슬라이더 (해당 번호 문제 표시)
+
             VStack{
                 Text("다음 글을 읽고 문제에 답하시오.")
                     .font(.headline)
@@ -52,6 +58,7 @@ struct QuestionLabel: View {
                     HStack(alignment: .center){
                         Button(action: {
                             self.isBookmarked.toggle()
+                            print(isTest, testNum, type, questionCnt)
                         }) {
                             Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
                                 .resizable()
