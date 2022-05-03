@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct questions{
+struct questions:Hashable{
     let testNum:Int
     let number:Int
     let type:Int

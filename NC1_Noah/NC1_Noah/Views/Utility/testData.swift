@@ -57,7 +57,7 @@ func getTestSet(isTest:Bool, testNum:Int, type:Int, questionCnt:Int)->[questions
     } else{
         let typeSet = test.filter({$0.type == type})
         var testSet = [questions]()
-        while testSet.count != questionCnt{
+        while testSet.count < questionCnt{
             let testCase = typeSet.randomElement()!
             if testSet.contains{$0.testNum == testCase.testNum && $0.number == testCase.number} == true{
                 continue
