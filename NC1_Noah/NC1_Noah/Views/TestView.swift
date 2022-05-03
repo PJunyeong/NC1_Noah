@@ -45,10 +45,10 @@ struct TestView: View {
                         Button(action: {
                             if self.isTest == false{
                                 confirmationDialog = true
-                                self.testNum = labelDict[buttonLabel]!
+                                self.type = labelDict[buttonLabel]!
                             } else{
                                 self.linkTag = 1
-                                self.type = labelDict[buttonLabel]!
+                                self.testNum = labelDict[buttonLabel]!
                             }
                         }) { TestButtonLabel(buttonName:buttonLabel)
                                 .confirmationDialog("문제 개수 선택", isPresented: $confirmationDialog){
