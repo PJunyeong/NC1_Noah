@@ -226,7 +226,7 @@ class DBHelper{
         return bookmarks
     }
     
-    func deleteBookmark(testNum:Int, number:Int)->Bool{
+    func deleteBookmark(testNum:Int, type: Int, number:Int)->Bool{
         let fileMgr = FileManager()
         let docPathURL = fileMgr.urls(for: .documentDirectory, in: .userDomainMask).first!
         let dbPath = docPathURL.appendingPathComponent("KU_CH_QuizApp.sqlite").path
@@ -240,18 +240,77 @@ class DBHelper{
             return false
         } else {
             if sqlite3_step(stmt) == SQLITE_DONE {
-                print("delete successfully")
-                return true
+                print("delete successfully at bookmark table")
             } else {
                 print("delete fails...")
+                sqlite3_finalize(stmt)
+                sqlite3_close(db)
                 return false
             }
         }
         
+        let updateQuery = "UPDATE questions SET questions.bookmark = 0 WHERE questions.test_num = \(testNum) AND questions.number = \(number);"
+        if sqlite3_prepare(db, updateQuery, -1, &stmt, nil) != SQLITE_OK{
+            print("prepare statement fails...")
+            return false
+        } else {
+            if sqlite3_step(stmt) == SQLITE_DONE {
+                print("update successfully at bookmark table")
+                sqlite3_finalize(stmt)
+                sqlite3_close(db)
+                return true
+                
+            } else {
+                print("update fails...")
+                sqlite3_finalize(stmt)
+                sqlite3_close(db)
+                return false
+            }
+        }
+    }
 //      bookmark 삭제 -> question 정보에서도 변경
+    
+    func insertBookmark(testNum:Int, type:Int, number:Int)->Bool{
+        let fileMgr = FileManager()
+        let docPathURL = fileMgr.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let dbPath = docPathURL.appendingPathComponent("KU_CH_QuizApp.sqlite").path
+        print(dbPath)
+        sqlite3_open(dbPath, &db)
+        let insertQuery = "INSERT INTO bookmark VALUES(\(testNum), \(type), \(number));"
+        var stmt: OpaquePointer?
         
+        if sqlite3_prepare(db, insertQuery, -1, &stmt, nil) != SQLITE_OK{
+            print("prepare statement fails...")
+            return false
+        } else {
+            if sqlite3_step(stmt) == SQLITE_DONE {
+                print("insert successfully at bookmark table")
+            } else {
+                print("insert fails...")
+                sqlite3_finalize(stmt)
+                sqlite3_close(db)
+                return false
+            }
+        }
         
-        
+        let updateQuery = "UPDATE questions SET questions.bookmark = 1 WHERE questions.test_num = \(testNum) AND questions.number = \(number);"
+        if sqlite3_prepare(db, updateQuery, -1, &stmt, nil) != SQLITE_OK{
+            print("prepare statement fails...")
+            return false
+        } else {
+            if sqlite3_step(stmt) == SQLITE_DONE {
+                print("update successfully at bookmark table")
+                sqlite3_finalize(stmt)
+                sqlite3_close(db)
+                return true
+                
+            } else {
+                print("update fails...")
+                sqlite3_finalize(stmt)
+                sqlite3_close(db)
+                return false
+            }
+        }
     }
     
 }
