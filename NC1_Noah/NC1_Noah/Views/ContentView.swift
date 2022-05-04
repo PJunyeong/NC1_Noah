@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     init() {
+    UserDefaults.standard.set(false, forKey: "checkDatabase")
     setData()
     UITabBar.appearance().backgroundColor = UIColor.white
     }

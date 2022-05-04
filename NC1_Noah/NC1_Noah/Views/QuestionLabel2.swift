@@ -10,6 +10,10 @@ import SwiftUI
 struct QuestionLabel2: View {
     @State private var answer = 0
     let question:questions
+    
+    /// QuestionLabel2의 answer  값 변경 시  QuestionLabel의 score 입력
+    let onSelected: (Int) -> Void
+
     var body: some View {
         VStack{
             Text(question.question)
@@ -146,12 +150,15 @@ struct QuestionLabel2: View {
             .font(.title)
         }
         .onChange(of:answer){offset in
+            onSelected(answer)
             print("answer: \(offset) changed")
         }
     }
 }
 struct QuestionLabel2_Previews: PreviewProvider {
     static var previews: some View {
-        QuestionLabel2(question:questions(testNum: 10, number: 1, type: 1, question: "문제문제문제문제", questionDetail: "문제해설문제해설문제해설", answer: 1, choice1: "보기1", choice1Detail: "보기1해설", choice2: "보기2", choice2Detail: "보기2해설", choice3: "보기3", choice3Detail: "보기3해설", choice4: "보기4", choice4Detail: "보기4해설", order: 0, bookmark: 0))
+        QuestionLabel2(question:questions(testNum: 10, number: 1, type: 1, question: "문제문제문제문제", questionDetail: "문제해설문제해설문제해설", answer: 1, choice1: "보기1", choice1Detail: "보기1해설", choice2: "보기2", choice2Detail: "보기2해설", choice3: "보기3", choice3Detail: "보기3해설", choice4: "보기4", choice4Detail: "보기4해설", order: 0, bookmark: 0)) { _ in
+            
+        }
     }
 }

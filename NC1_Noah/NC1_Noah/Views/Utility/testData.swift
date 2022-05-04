@@ -36,6 +36,12 @@ func getBoxes()->Void{
     return
 }
 
+func getNotes()->[note]{
+    let dbHelper = DBHelper()
+    let notes = dbHelper.selectNote()
+    return notes
+}
+
 func matchBox(testNum:Int, number:Int, order:Int)->String{
     if order == 0{
         return ""
@@ -107,4 +113,8 @@ func getScore(testSet:[questions], answerSet:[Int])->Int{
         }
     }
     return total
+}
+
+func checkNote(isTest:Int, testNum:Int, type:Int, number:Int){
+    
 }

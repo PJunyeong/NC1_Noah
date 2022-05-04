@@ -39,7 +39,8 @@ class DBHelper{
         
         if !((try? finalDatabaseURL.checkResourceIsReachable()) ?? false){
             print("DB not in doc directory")
-            let documentsURL = Bundle.main.resourceURL?.appendingPathComponent("KU_CH_QuizApp.sqlite")
+//            let documentsURL = Bundle.main.resourceURL?.appendingPathComponent("KU_CH_QuizApp.sqlite")
+            let documentsURL = Bundle.main.url(forResource: "KU_CH_QuizApp.sqlite", withExtension: nil)
             do {
                 try fileManager.copyItem(atPath: (documentsURL?.path)!, toPath: finalDatabaseURL.path)
                 print("DB from main to docs")
@@ -199,6 +200,33 @@ class DBHelper{
         return boxes
     }
     
+    func selectNote()->[note]{
+        let fileMgr = FileManager()
+        let docPathURL = fileMgr.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let dbPath = docPathURL.appendingPathComponent("KU_CH_QuizApp.sqlite").path
+        print(dbPath)
+        sqlite3_open(dbPath, &db)
+        let query = "SELECT * FROM note;"
+        
+        var stmt: OpaquePointer?
+        var notes = [note]()
+        
+        if sqlite3_prepare(db, query, -1, &stmt, nil) != SQLITE_OK{
+            print("prepare statement fails...")
+            return []
+        }
+        
+        while (sqlite3_step(stmt) == SQLITE_ROW){
+            let testNum = Int(sqlite3_column_int(stmt, 0))
+            let number = Int(sqlite3_column_int(stmt, 1))
+            let wrongCnt = Int(sqlite3_column_int(stmt, 2))
+            notes.append(note(testNum: testNum, number: number, wrongCnt: wrongCnt))
+        }
+        sqlite3_finalize(stmt)
+        sqlite3_close(db)
+        return notes
+    }
+    
     func selectBookmark()->[bookmark]{
         let fileMgr = FileManager()
         let docPathURL = fileMgr.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -311,6 +339,49 @@ class DBHelper{
                 return false
             }
         }
+    }
+    
+    func updateNote(isTest:Int, testNum:Int, type:Int, number:Int)->Bool{
+        let fileMgr = FileManager()
+        let docPathURL = fileMgr.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let dbPath = docPathURL.appendingPathComponent("KU_CH_QuizApp.sqlite").path
+        print(dbPath)
+        sqlite3_open(dbPath, &db)
+        
+        let selectQuery = "SELECT COUNT(*) FROM note WHERE note.test_num = \(testNum) AND note.number = \(number)"
+        var stmt: OpaquePointer?
+        if sqlite3_prepare(db, selectQuery, -1, &stmt, nil) != SQLITE_OK{
+            print("prepare statement fails...")
+            return false
+        }
+        var wrongCnt = 0
+        while (sqlite3_step(stmt) == SQLITE_ROW){
+            let isInNote = Int(sqlite3_column_int(stmt, 0))
+            wrongCnt = isInNote
+        }
+//        note 테이블에 이 문제 정보가 있다면 wrongCnt는 1이 된다.
+        
+        wrongCnt += 1
+        
+        let updateQuery = "REPLACE INTO note (test_num, number, wrong_cnt) VALUES (\(testNum), \(number), \(wrongCnt))"
+        if sqlite3_prepare(db, updateQuery, -1, &stmt, nil) != SQLITE_OK{
+            print("prepare statement fails...")
+            return false
+        } else {
+            if sqlite3_step(stmt) == SQLITE_DONE {
+                print("update successfully at bookmark table")
+                sqlite3_finalize(stmt)
+                sqlite3_close(db)
+                return true
+                
+            } else {
+                print("update fails...")
+                sqlite3_finalize(stmt)
+                sqlite3_close(db)
+                return false
+            }
+        }
+        
     }
     
 }

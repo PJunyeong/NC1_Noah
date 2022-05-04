@@ -47,7 +47,11 @@ struct QuestionLabel: View {
             TabView(selection: $tabSelected){
                 ForEach(Array(testSet.enumerated()), id:\.element){
                     index, question in
-                    QuestionLabel2(question: question).tag(index)
+                    QuestionLabel2(question: question){ score in
+                        currentScore.answerSet[index] = score
+                        print(index)
+                        print(currentScore.answerSet[index])
+                    }.tag(index)
                 }
             }
             .onChange(of: tabSelected){offset in

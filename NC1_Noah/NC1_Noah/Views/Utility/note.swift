@@ -8,21 +8,13 @@
 import Foundation
 
 struct note{
-    let isTest:Int
     let testNum:Int
-    let type:Int
     let number:Int
-    var wrongCnt:Int = 1
+    var wrongCnt:Int
     
-    init(isTest:Int, testNum:Int, type:Int, number:Int){
-        self.isTest = isTest
+    init(testNum:Int, number:Int, wrongCnt:Int){
         self.testNum = testNum
-        self.type = type
         self.number = number
-    }
-    
-    mutating func wrongCntAdd()->Void{
-        wrongCnt += 1
-        print("wrongCnt += 1")
+        self.wrongCnt = wrongCnt
     }
 }
