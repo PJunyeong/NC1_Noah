@@ -9,7 +9,6 @@ import SwiftUI
 
 struct NoteView: View {
     @State private var selectedIndex = 0
-    let buttonLabels = [["10회", "20회", "30회", "40회", "50회"], ["10회", "20회", "30회", "40회", "50회"]]
     var body: some View {
         VStack{
             Picker("오답노트", selection: $selectedIndex, content: {
@@ -27,15 +26,7 @@ struct NoteView: View {
                         .foregroundColor(.accentColor)
                         .font(.headline)
                     ){
-                        ForEach(buttonLabels[0], id: \.self){
-                            buttonLabel in
-                            NavigationLink {
-                                Text("문제 푸는 곳")
-                            } label: {
-                                Text(buttonLabel)
-                                    .font(.body)
-                            }
-                        }
+                        
                     }
                 }
             }

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ScoreView: View {
     @State private var selectedIndex = 0
-    let buttonLabels = [["10회", "20회", "30회", "40회", "50회"], ["유형1", "유형2", "유형3", "유형4", "유형5", "유형6"]]
     var body: some View {
         VStack{
             Picker("점수", selection: $selectedIndex, content: {
@@ -41,16 +40,7 @@ struct ScoreView: View {
                         .foregroundColor(.accentColor)
                         .font(.headline)
                     ){
-                        ForEach(buttonLabels[selectedIndex], id: \.self){
-                            buttonLabel in
-                            NavigationLink {
-                                Text("점수 채점")
-//                                ScoreDetailView()
-                            } label: {
-                                Text(buttonLabel)
-                                    .font(.body)
-                            }
-                        }
+                        let labelNum = labelDict[buttonLabel]!
                     }
                 }
             }

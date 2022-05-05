@@ -12,18 +12,26 @@ struct QuestionLabel: View {
     var testNum:Int
     var type:Int
     var questionCnt:Int
-    @Environment(\.dismiss) var dismiss
+    let now = Date.now
+    @State private var currentScore:score
+//    let testSet:[questions]
+//    let now:Date
     @State private var tabSelected = 0
     @State private var questionNum = 1.0
     @State private var isEditing = false
     @State private var showingAlert = false
     @State private var showingSubmit = false
     @State private var showingView = false
+    init(isTest:Bool, testNum:Int, type:Int, questionCnt:Int){
+        self.isTest = isTest
+        self.testNum = testNum
+        self.type = type
+        self.questionCnt = questionCnt
+        _currentScore = State(initialValue: score.init(date: now, isTest: isTest, questionCnt: questionCnt))
+    }
     var body: some View {
-        let testSet = getTestSet(isTest: isTest, testNum: testNum, type: type, questionCnt: questionCnt)
-        //      TestView에서 입력받은 파라미터로 문제 세트 완료
-        let now = Date.now
-        var currentScore = score.init(date: now, isTest: isTest, questionCnt: questionCnt)
+        let testSet = getLocalTestSet(date: now, isTest: isTest, testNum: testNum, type: type, questionCnt: questionCnt)
+//        //      TestView에서 입력받은 파라미터로 문제 세트 완료
         VStack{
             Slider(value: $questionNum,
                    in: 1...Double(questionCnt),
@@ -47,10 +55,11 @@ struct QuestionLabel: View {
             TabView(selection: $tabSelected){
                 ForEach(Array(testSet.enumerated()), id:\.element){
                     index, question in
-                    QuestionLabel2(question: question){ score in
-                        currentScore.answerSet[index] = score
+                    QuestionLabel2(getInfo: false, isBookmarked: question.bookmark, question: question, now: now){ score in
+                        self.currentScore.answerSet[index] = score
                         print(index)
                         print(currentScore.answerSet[index])
+                        print(currentScore.answerSet)
                     }.tag(index)
                 }
             }
@@ -61,6 +70,32 @@ struct QuestionLabel: View {
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(getTestTitle(isTest: isTest, testNum: testNum, type: type))
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading){
+                    Button(action: {
+                        self.showingAlert.toggle()
+                        print(now)
+                    }, label: {
+                        Image(systemName: "delete.backward")
+                            .alert(isPresented: $showingAlert){
+                                Alert(title: Text("경고!"), message: Text("제출하지 않으면 지금까지 푼 문제가 사라집니다"), primaryButton: .destructive(Text("돌아갈게요!"), action: {NavigationUtil.popToRootView()}), secondaryButton: .cancel(Text("좀 더 생각해볼게요")))
+                            }
+                    })
+                }
+                ToolbarItem(placement: .navigationBarTrailing){
+                    NavigationLink(destination: ScoreDetailView(currentScore: currentScore, date:now), isActive: $showingView){
+                        EmptyView()
+                        Button(action: {
+                            self.showingSubmit.toggle()
+                        }, label: {
+                            Image(systemName: "arrow.up")
+                                .alert(isPresented: $showingSubmit){
+                                    Alert(title: Text("제출"), message: Text(isAllSolved(answerSet:currentScore.answerSet) ? "모든 문제를 푸셨군요! 제출하시겠습니까?" : "아직 풀지 않은 문제가 있어요!"), primaryButton: .destructive(Text("제출할게요!"), action: {self.showingView = true}), secondaryButton: .cancel(Text("좀 더 생각해볼게요")))
+                        }
+                    })
+                }
+            }
+            }
         }
     }
 }

@@ -269,6 +269,8 @@ class DBHelper{
         } else {
             if sqlite3_step(stmt) == SQLITE_DONE {
                 print("delete successfully at bookmark table")
+                sqlite3_finalize(stmt)
+                sqlite3_close(db)
             } else {
                 print("delete fails...")
                 sqlite3_finalize(stmt)
@@ -277,7 +279,8 @@ class DBHelper{
             }
         }
         
-        let updateQuery = "UPDATE questions SET questions.bookmark = 0 WHERE questions.test_num = \(testNum) AND questions.number = \(number);"
+        sqlite3_open(dbPath, &db)
+        let updateQuery = "UPDATE questions SET bookmark = 0 WHERE test_num = \(testNum) AND number = \(number);"
         if sqlite3_prepare(db, updateQuery, -1, &stmt, nil) != SQLITE_OK{
             print("prepare statement fails...")
             return false
@@ -313,6 +316,8 @@ class DBHelper{
         } else {
             if sqlite3_step(stmt) == SQLITE_DONE {
                 print("insert successfully at bookmark table")
+                sqlite3_finalize(stmt)
+                sqlite3_close(db)
             } else {
                 print("insert fails...")
                 sqlite3_finalize(stmt)
@@ -321,7 +326,8 @@ class DBHelper{
             }
         }
         
-        let updateQuery = "UPDATE questions SET questions.bookmark = 1 WHERE questions.test_num = \(testNum) AND questions.number = \(number);"
+        sqlite3_open(dbPath, &db)
+        let updateQuery = "UPDATE questions SET bookmark = 1 WHERE test_num = \(testNum) AND number = \(number);"
         if sqlite3_prepare(db, updateQuery, -1, &stmt, nil) != SQLITE_OK{
             print("prepare statement fails...")
             return false
@@ -381,7 +387,29 @@ class DBHelper{
                 return false
             }
         }
-        
     }
     
+    func getAvgScore()->Double{
+        let fileMgr = FileManager()
+        let docPathURL = fileMgr.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let dbPath = docPathURL.appendingPathComponent("KU_CH_QuizApp.sqlite").path
+        print(dbPath)
+        sqlite3_open(dbPath, &db)
+        
+        let selectQuery = "SELECT COUNT(*), SUM(score) FROM score WHERE score.is_test = 1"
+        var stmt: OpaquePointer?
+        if sqlite3_prepare(db, selectQuery, -1, &stmt, nil) != SQLITE_OK{
+            print("prepare statement fails...")
+            return 0.0
+        }
+        var count: Double = 0.0
+        var total: Double = 0.0
+        while (sqlite3_step(stmt) == SQLITE_ROW){
+            count = Double(sqlite3_column_int(stmt, 0))
+            total = Double(sqlite3_column_int(stmt, 0))
+        }
+        sqlite3_finalize(stmt)
+        sqlite3_close(db)
+        return count / total
+    }
 }
