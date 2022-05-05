@@ -260,7 +260,7 @@ class DBHelper{
         let dbPath = docPathURL.appendingPathComponent("KU_CH_QuizApp.sqlite").path
         print(dbPath)
         sqlite3_open(dbPath, &db)
-        let deleteQuery = "DELETE FROM bookmark WHERE bookmark.test_num = \(testNum) AND bookmark.number = \(number);"
+        let deleteQuery = "DELETE FROM bookmark WHERE test_num = \(testNum) AND number = \(number);"
         var stmt: OpaquePointer?
         
         if sqlite3_prepare(db, deleteQuery, -1, &stmt, nil) != SQLITE_OK{
@@ -396,7 +396,7 @@ class DBHelper{
         print(dbPath)
         sqlite3_open(dbPath, &db)
         
-        let selectQuery = "SELECT COUNT(*), SUM(score) FROM score WHERE score.is_test = 1"
+        let selectQuery = "SELECT COUNT(*), SUM(score.score) FROM score WHERE is_test > 6"
         var stmt: OpaquePointer?
         if sqlite3_prepare(db, selectQuery, -1, &stmt, nil) != SQLITE_OK{
             print("prepare statement fails...")
@@ -406,10 +406,174 @@ class DBHelper{
         var total: Double = 0.0
         while (sqlite3_step(stmt) == SQLITE_ROW){
             count = Double(sqlite3_column_int(stmt, 0))
-            total = Double(sqlite3_column_int(stmt, 0))
+            total = Double(sqlite3_column_int(stmt, 1))
+            print(count, total)
         }
         sqlite3_finalize(stmt)
         sqlite3_close(db)
-        return count / total
+        
+        if count == 0.0{
+            return 0.0
+        } else{
+            return total / count
+        }
     }
+    
+    func insertScore(currentScore:score)->Bool{
+        let fileMgr = FileManager()
+        let docPathURL = fileMgr.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let dbPath = docPathURL.appendingPathComponent("KU_CH_QuizApp.sqlite").path
+        print(dbPath)
+        sqlite3_open(dbPath, &db)
+        let dateString = DateToString(date: currentScore.date)
+        var insertString = "\"" + dateString + "\"" + ", " + String(currentScore.isTest) + ", " + "1, " + String(currentScore.score) + ", " + String(currentScore.questionCnt)
+        
+        for i in 0..<currentScore.questionCnt{
+            insertString += ", " + String(currentScore.answerSet[i])
+        }
+        
+        for _ in 0..<(100-currentScore.questionCnt){
+            insertString += ", " + "0"
+        }
+        
+        let insertQuery = "INSERT INTO score VALUES(" + insertString + ");"
+        var stmt: OpaquePointer?
+        
+        if sqlite3_prepare(db, insertQuery, -1, &stmt, nil) != SQLITE_OK{
+            print("prepare statement fails...")
+            return false
+        } else {
+            if sqlite3_step(stmt) == SQLITE_DONE {
+                print("insert successfully at bookmark table")
+                sqlite3_finalize(stmt)
+                sqlite3_close(db)
+                return true
+            } else {
+                print("insert fails...")
+                sqlite3_finalize(stmt)
+                sqlite3_close(db)
+                return false
+            }
+        }
+    }
+    
+    func selectScore()->[score]{
+        let fileMgr = FileManager()
+        let docPathURL = fileMgr.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let dbPath = docPathURL.appendingPathComponent("KU_CH_QuizApp.sqlite").path
+        print(dbPath)
+        sqlite3_open(dbPath, &db)
+        
+        let selectQuery = "SELECT * FROM score"
+        var stmt: OpaquePointer?
+        if sqlite3_prepare(db, selectQuery, -1, &stmt, nil) != SQLITE_OK{
+            print("prepare statement fails...")
+            return []
+        }
+        var scores = [score]()
+        while (sqlite3_step(stmt) == SQLITE_ROW){
+            var localScore = score.init(date: Date.now, isTest: 10, questionCnt: 100)
+            let dateString = String(cString: sqlite3_column_text(stmt, 0))
+            let isTest = Int(sqlite3_column_int(stmt, 1))
+            let _ = Int(sqlite3_column_int(stmt, 2))
+            let score = Int(sqlite3_column_int(stmt, 3))
+            let questionCnt = Int(sqlite3_column_int(stmt, 4))
+            let date = StringToDate(dateString: dateString)
+            localScore.date = date
+            localScore.isTest = isTest
+            localScore.questionCnt = questionCnt
+            localScore.answerSet = []
+            localScore.score = score
+            for i in 0..<questionCnt{
+                let answer = Int(sqlite3_column_int(stmt, Int32(5 + i)))
+                localScore.answerSet.append(answer)
+            }
+            for i in questionCnt..<100{
+                _ = Int(sqlite3_column_int(stmt, Int32(5 + i)))
+            }
+            scores.append(localScore)
+        }
+        sqlite3_finalize(stmt)
+        sqlite3_close(db)
+        return scores
+    }
+    
+    func insertTestSet(date:Date, testSet:[questions], questionCnt:Int)->Bool{
+        if questionCnt == 100{
+            return true
+        }
+        let fileMgr = FileManager()
+        let docPathURL = fileMgr.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let dbPath = docPathURL.appendingPathComponent("KU_CH_QuizApp.sqlite").path
+        print(dbPath)
+        sqlite3_open(dbPath, &db)
+        let dateString = DateToString(date: date)
+        var insertString = "\"" + dateString + "\"" + ", " + String(questionCnt)
+        
+        for i in 0..<questionCnt{
+            insertString += ", " + String(testSet[i].testNum)
+            insertString += ", " + String(testSet[i].number)
+        }
+        
+        for _ in 0..<(50-questionCnt){
+            insertString += ", " + "0"
+            insertString += ", " + "0"
+        }
+        
+        let insertQuery = "INSERT INTO question_orders VALUES(" + insertString + ");"
+        print(insertQuery)
+        var stmt: OpaquePointer?
+        
+        if sqlite3_prepare(db, insertQuery, -1, &stmt, nil) != SQLITE_OK{
+            print("prepare statement fails...")
+            return false
+        } else {
+            if sqlite3_step(stmt) == SQLITE_DONE {
+                print("insert successfully at question_orders table")
+                sqlite3_finalize(stmt)
+                sqlite3_close(db)
+                return true
+            } else {
+                print("insert fails...")
+                sqlite3_finalize(stmt)
+                sqlite3_close(db)
+                return false
+            }
+        }
+    }
+    
+    func selectTestSet()->Void{
+        let fileMgr = FileManager()
+        let docPathURL = fileMgr.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let dbPath = docPathURL.appendingPathComponent("KU_CH_QuizApp.sqlite").path
+        print(dbPath)
+        sqlite3_open(dbPath, &db)
+        
+        let selectQuery = "SELECT * FROM question_orders"
+        var stmt: OpaquePointer?
+        if sqlite3_prepare(db, selectQuery, -1, &stmt, nil) != SQLITE_OK{
+            print("prepare statement fails...")
+            return
+        }
+        while (sqlite3_step(stmt) == SQLITE_ROW){
+            let dateString = String(cString: sqlite3_column_text(stmt, 0))
+            let date = StringToDate(dateString: dateString)
+            let questionCnt = Int(sqlite3_column_int(stmt, 1))
+            var testSet = [questions]()
+            var cursor = 0
+            for _ in 0..<questionCnt{
+                let testNum = Int(sqlite3_column_int(stmt, Int32(2 + cursor)))
+                let number = Int(sqlite3_column_int(stmt, Int32(3 + cursor)))
+                cursor += 2
+                let question = test.filter{$0.testNum == testNum && $0.number == number}[0]
+                testSet.append(question)
+            }
+            localTestSet[date] = testSet
+            print("THIS IS SET LOCAL TEST SET")
+        }
+        sqlite3_finalize(stmt)
+        sqlite3_close(db)
+        return
+    }
+    
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct note{
+struct note :Hashable{
     let testNum:Int
     let number:Int
     var wrongCnt:Int

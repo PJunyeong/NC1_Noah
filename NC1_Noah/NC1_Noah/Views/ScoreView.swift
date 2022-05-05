@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct ScoreView: View {
+    let now = Date.now
     @State private var selectedIndex = 0
     var body: some View {
+        let scores:[score] = getAllScore()
+        let avg:String = String(format: "%.2f", getAvgScore())
         VStack{
             Picker("점수", selection: $selectedIndex, content: {
                 Text("기출별")
@@ -22,15 +25,12 @@ struct ScoreView: View {
             .padding(10)
             
             VStack{
-                Text("80 / 100")
+                Text("\(avg) / 100")
                     .font(.largeTitle)
                     .foregroundColor(.accentColor)
-                Text("10회 응시 중 7회 합격!")
+                Text(getPassMessage())
                     .font(.title2)
                     .foregroundColor(.black)
-                Text("공부할 필요가 없겠군요!")
-                    .font(.headline)
-                    .foregroundColor(.gray)
             }
             .padding()
             
@@ -40,7 +40,24 @@ struct ScoreView: View {
                         .foregroundColor(.accentColor)
                         .font(.headline)
                     ){
-                        let labelNum = labelDict[buttonLabel]!
+                        let secHead = labelDict[buttonLabel]!
+                        let secMembers = getSecMembers( secHead:secHead, scores:scores)
+                        ForEach(secMembers, id:\.self){
+                            secMember in
+                            NavigationLink{
+                                ScoreDetailView(currentScore: scores.filter{$0.date == secMember.date}[0], date: secMember.date)
+                            } label: {
+                                HStack{
+                                    Text("\(scores.filter{$0.date == secMember.date}[0].score)점")
+                                        .padding(.leading, 10)
+                                        .font(.body)
+                                    Spacer()
+                                    Text("\(Date(timeInterval: Date().timeIntervalSince(secMember.date), since:Date()).relativeTime_abbreviated)")
+                                        .padding(.trailing, 10)
+                                        .font(.body)
+                                }
+                            }
+                        }
                     }
                 }
             }

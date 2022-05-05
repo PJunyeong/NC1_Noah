@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct bookmark{
+struct bookmark :Hashable{
     let testNum:Int
     let type:Int
     let number:Int

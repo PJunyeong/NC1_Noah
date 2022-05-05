@@ -17,6 +17,7 @@ struct ScoreDetailView: View {
         self.date = date
         self.currentScore = currentScore
         self.currentScore.score = score
+        getLocalTestSet()
         self.testSet = localTestSet[date] ?? []
     }
     var body: some View {
@@ -64,6 +65,6 @@ struct ScoreDetailView: View {
 
 struct ScoreDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        ScoreDetailView(currentScore: score.init(date: Date.now, isTest: true, questionCnt: 100), date: Date.now)
+        ScoreDetailView(currentScore: score.init(date: Date.now, isTest: 10, questionCnt: 100), date: Date.now)
     }
 }

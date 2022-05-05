@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct score{
-    let date:Date
-    let isTest:Bool
+struct score : Hashable{
+    var date:Date
+    var isTest:Int
 //    let submitted:Bool
     var score:Int = 0
     var questionCnt:Int
     var answerSet:[Int]
     
-    init(date:Date, isTest:Bool, questionCnt:Int){
+    init(date:Date, isTest:Int, questionCnt:Int){
         self.date = date
         self.isTest = isTest
         self.questionCnt = questionCnt

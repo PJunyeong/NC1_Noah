@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4A33C17E281F5CF300A2E45C /* GradingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A33C17D281F5CF300A2E45C /* GradingView.swift */; };
 		4A5338A9282144EE00B4E505 /* QuestionLabel2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5338A8282144EE00B4E505 /* QuestionLabel2.swift */; };
 		4A5338AB2822021700B4E505 /* score.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5338AA2822021700B4E505 /* score.swift */; };
 		4A5338AD2822082900B4E505 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5338AC2822082900B4E505 /* ColorExtension.swift */; };
@@ -31,10 +30,10 @@
 		4ADA20F2282018DB00EF9B0D /* questionOrders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADA20F1282018DB00EF9B0D /* questionOrders.swift */; };
 		4ADC86422823D56A009BC7FF /* KU_CH_QuizApp.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 4ADC86412823D56A009BC7FF /* KU_CH_QuizApp.sqlite */; };
 		4ADC86442823F628009BC7FF /* PopToRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADC86432823F628009BC7FF /* PopToRoot.swift */; };
+		4ADC86462824150F009BC7FF /* DateString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADC86452824150F009BC7FF /* DateString.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4A33C17D281F5CF300A2E45C /* GradingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradingView.swift; sourceTree = "<group>"; };
 		4A5338A8282144EE00B4E505 /* QuestionLabel2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionLabel2.swift; sourceTree = "<group>"; };
 		4A5338AA2822021700B4E505 /* score.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = score.swift; sourceTree = "<group>"; };
 		4A5338AC2822082900B4E505 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
@@ -59,6 +58,7 @@
 		4ADA20F1282018DB00EF9B0D /* questionOrders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = questionOrders.swift; sourceTree = "<group>"; };
 		4ADC86412823D56A009BC7FF /* KU_CH_QuizApp.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = KU_CH_QuizApp.sqlite; sourceTree = "<group>"; };
 		4ADC86432823F628009BC7FF /* PopToRoot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopToRoot.swift; sourceTree = "<group>"; };
+		4ADC86452824150F009BC7FF /* DateString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateString.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +87,7 @@
 				4A5338AC2822082900B4E505 /* ColorExtension.swift */,
 				4A5338AE2822112000B4E505 /* getOpacity.swift */,
 				4ADC86432823F628009BC7FF /* PopToRoot.swift */,
+				4ADC86452824150F009BC7FF /* DateString.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -137,7 +138,6 @@
 				4A5338A8282144EE00B4E505 /* QuestionLabel2.swift */,
 				4A96BF40281A3DAF00D4DC9B /* TestButtonLabel.swift */,
 				4AAF50BC281BDD7700669344 /* ScoreDetailView.swift */,
-				4A33C17D281F5CF300A2E45C /* GradingView.swift */,
 				4A20C1A6281E2ECD0055A035 /* Utility */,
 			);
 			path = Views;
@@ -216,6 +216,7 @@
 			files = (
 				4A5338AF2822112000B4E505 /* getOpacity.swift in Sources */,
 				4A96BF34281A308D00D4DC9B /* TestView.swift in Sources */,
+				4ADC86462824150F009BC7FF /* DateString.swift in Sources */,
 				4A5338A9282144EE00B4E505 /* QuestionLabel2.swift in Sources */,
 				4ACD3B41281E6DEE0066C8F8 /* note.swift in Sources */,
 				4AD5EEBC2820D14D006E072A /* testData.swift in Sources */,
@@ -231,7 +232,6 @@
 				4A96BF38281A30AE00D4DC9B /* ScoreView.swift in Sources */,
 				4ACD3B43281E6FB80066C8F8 /* bookmark.swift in Sources */,
 				4ADA20EE282017F200EF9B0D /* questions.swift in Sources */,
-				4A33C17E281F5CF300A2E45C /* GradingView.swift in Sources */,
 				4ACD3B49281E79410066C8F8 /* DBHelper.swift in Sources */,
 				4AD5EEC02820D30E006E072A /* questionBox.swift in Sources */,
 				4A5338AD2822082900B4E505 /* ColorExtension.swift in Sources */,

@@ -27,7 +27,7 @@ struct QuestionLabel: View {
         self.testNum = testNum
         self.type = type
         self.questionCnt = questionCnt
-        _currentScore = State(initialValue: score.init(date: now, isTest: isTest, questionCnt: questionCnt))
+        _currentScore = State(initialValue: score.init(date: now, isTest: isTest ? testNum : type, questionCnt: questionCnt))
     }
     var body: some View {
         let testSet = getLocalTestSet(date: now, isTest: isTest, testNum: testNum, type: type, questionCnt: questionCnt)
@@ -78,7 +78,10 @@ struct QuestionLabel: View {
                     }, label: {
                         Image(systemName: "delete.backward")
                             .alert(isPresented: $showingAlert){
-                                Alert(title: Text("경고!"), message: Text("제출하지 않으면 지금까지 푼 문제가 사라집니다"), primaryButton: .destructive(Text("돌아갈게요!"), action: {NavigationUtil.popToRootView()}), secondaryButton: .cancel(Text("좀 더 생각해볼게요")))
+                                Alert(title: Text("경고!"), message: Text("제출하지 않으면 지금까지 푼 문제가 사라집니다"), primaryButton: .destructive(Text("돌아갈게요!"), action: {
+                                    NavigationUtil.popToRootView()
+                                    localTestSet.removeValue(forKey: now)
+                                }), secondaryButton: .cancel(Text("좀 더 생각해볼게요")))
                             }
                     })
                 }
@@ -90,7 +93,17 @@ struct QuestionLabel: View {
                         }, label: {
                             Image(systemName: "arrow.up")
                                 .alert(isPresented: $showingSubmit){
-                                    Alert(title: Text("제출"), message: Text(isAllSolved(answerSet:currentScore.answerSet) ? "모든 문제를 푸셨군요! 제출하시겠습니까?" : "아직 풀지 않은 문제가 있어요!"), primaryButton: .destructive(Text("제출할게요!"), action: {self.showingView = true}), secondaryButton: .cancel(Text("좀 더 생각해볼게요")))
+                                    Alert(title: Text("제출"), message: Text(isAllSolved(answerSet:currentScore.answerSet) ? "모든 문제를 푸셨군요! 제출하시겠습니까?" : "아직 풀지 않은 문제가 있어요!"), primaryButton: .destructive(Text("제출할게요!"), action: {
+                                        self.showingView = true
+                                        let score = getScore(testSet: localTestSet[now]!, answerSet: currentScore.answerSet)
+                                        currentScore.score = score
+                                        _ = insertScore(currentScore: currentScore)
+                                        _ = insertTestSet(date:now, questionCnt: questionCnt)
+                                        getLocalTestSet()
+                                        _ = getScoreBool(testSet: localTestSet[now]!, answerSet: currentScore.answerSet)
+                                        print("SUBMIT!")
+                                        print(localTestSet.keys)
+                                    }), secondaryButton: .cancel(Text("좀 더 생각해볼게요")))
                         }
                     })
                 }

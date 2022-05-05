@@ -21,16 +21,57 @@ struct NoteView: View {
             .padding(10)
             
             List{
-                ForEach(buttonLabels[selectedIndex], id: \.self) { buttonLabel in
+                ForEach(buttonLabels[0], id: \.self) { buttonLabel in
                     Section(header: Text(buttonLabel)
                         .foregroundColor(.accentColor)
                         .font(.headline)
                     ){
-                        
+                        let secHead = labelDict[buttonLabel]!
+                        if selectedIndex == 0{
+                            let secMembers:[note] = getNoteMembers(secHead: secHead)
+                            ForEach(secMembers, id:\.self){
+                                secMember in
+                                let question = getQuestion(testNum: secMember.testNum, number: secMember.number)
+                                NavigationLink{
+                                    QuestionLabel2(getInfo:true, isBookmarked: question.bookmark, question: question, now:Date.now){
+                                        sel in
+                                    }
+                                } label: {
+                                    HStack(alignment: .center){
+                                        Text("\(secMember.number)")
+                                            .font(.body)
+                                            .padding(.leading, 10)
+                                        Spacer()
+                                        Text("\(secMember.wrongCnt)회 오답")
+                                            .font(.body)
+                                            .padding(.trailing, 10)
+                                            .foregroundColor(.gray)
+                                    }
+                                }
+                            }
+                        } else{
+                            let secMembers:[bookmark] = getBookmarkMembers(secHead: secHead)
+                            ForEach(secMembers, id:\.self){
+                                secMember in
+                                let question = getQuestion(testNum: secMember.testNum, number: secMember.number)
+                                NavigationLink{
+                                    QuestionLabel2(getInfo:true, isBookmarked: question.bookmark, question: question, now:Date.now){
+                                        sel in
+                                    }
+                                } label: {
+                                    HStack{
+                                        Text("\(secMember.number)번")
+                                            .font(.body)
+                                            .padding(.leading, 10)
+                                        Spacer()
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
-            .listStyle(.inset)
+            .listStyle(.sidebar)
         }
     }
 }

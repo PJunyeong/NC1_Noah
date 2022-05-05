@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 let buttonLabels = [["10회", "20회", "30회", "40회", "50회"], ["유형1", "유형2", "유형3", "유형4", "유형5", "유형6"]]
 let labelDict:[String:Int] = ["10회": 10, "20회": 20, "30회": 30, "40회": 40, "50회":50, "유형1":1, "유형2":2, "유형3":3, "유형4":4, "유형5":5, "유형6":6]
@@ -19,6 +20,7 @@ func setData()->Void{
     getTest()
     getBookmarks()
     getBoxes()
+    getLocalTestSet()
     print("Set data successfully activated")
 }
 
@@ -38,6 +40,33 @@ func getBoxes()->Void{
     let dbHelper = DBHelper()
     boxes = dbHelper.selectBox()
     return
+}
+
+func getLocalTestSet()->Void{
+    let dbHelper = DBHelper()
+    dbHelper.selectTestSet()
+    let scores = getAllScore()
+    for scoreData in scores{
+        if localTestSet[scoreData.date] == nil{
+            localTestSet[scoreData.date] = getTestSet(isTest: true, testNum: scoreData.isTest, type: scoreData.isTest, questionCnt: scoreData.questionCnt)
+        }
+    }
+    return 
+}
+
+func getQuestion(testNum:Int, number:Int)->questions{
+    return test.filter{$0.testNum == testNum && $0.number == number}[0]
+}
+
+func insertTestSet(date:Date, questionCnt:Int)->Bool{
+    let testSet = localTestSet[date]!
+    print("WHAT TO INSERT: \(testSet)")
+    let dbHelper = DBHelper()
+    if dbHelper.insertTestSet(date: date, testSet: testSet, questionCnt: questionCnt) == true{
+        return true
+    } else{
+        return false
+    }
 }
 
 func getNotes()->[note]{
@@ -103,17 +132,19 @@ func getTestTitle(isTest:Bool, testNum:Int, type:Int)->String{
 func checkBookmark(date:Date, testNum:Int, type: Int, number:Int)->Bool{
     let dbHelper = DBHelper()
     
-    for i in 0..<localTestSet[date]!.count{
-        if localTestSet[date]![i].testNum == testNum && localTestSet[date]![i].number == number{
-            if localTestSet[date]![i].bookmark == 0 {
-                localTestSet[date]![i].bookmark = 1
-                print("localTestSet Bookmark -> 1")
-            } else{
-                localTestSet[date]![i].bookmark = 0
-                print("localTestSet Bookmark -> 0")
+    if localTestSet[date] != nil{
+        for i in 0..<localTestSet[date]!.count{
+            if localTestSet[date]![i].testNum == testNum && localTestSet[date]![i].number == number{
+                if localTestSet[date]![i].bookmark == 0 {
+                    localTestSet[date]![i].bookmark = 1
+                    print("localTestSet Bookmark -> 1")
+                } else{
+                    localTestSet[date]![i].bookmark = 0
+                    print("localTestSet Bookmark -> 0")
+                }
+                print("localTestSet bookmark toggled")
+                break
             }
-            print("localTestSet bookmark toggled")
-            break
         }
     }
     
@@ -121,13 +152,12 @@ func checkBookmark(date:Date, testNum:Int, type: Int, number:Int)->Bool{
         if test[i].testNum == testNum && test[i].number == number{
             if test[i].bookmark == 0{
                 test[i].bookmark = 1
-                bookmarks.append(bookmark(testNum:testNum, type:type, number:number))
                 let _ = dbHelper.insertBookmark(testNum: testNum, type: type, number: number)
             } else{
                 test[i].bookmark = 0
-                bookmarks = bookmarks.filter({$0.testNum != testNum && $0.number != number})
                 let _ = dbHelper.deleteBookmark(testNum: testNum, type: type, number: number)
             }
+            getBookmarks()
             print("bookmark toggle activated")
             return true
         }
@@ -137,7 +167,9 @@ func checkBookmark(date:Date, testNum:Int, type: Int, number:Int)->Bool{
 
 func getScore(testSet:[questions], answerSet:[Int])->Int{
     var total = 0
-    for i in 0..<answerSet.count{
+    print(testSet)
+    print(answerSet)
+    for i in 0..<testSet.count{
         if testSet[i].answer == answerSet[i]{
             total += 1
         }
@@ -152,13 +184,15 @@ func getScoreBool(testSet:[questions], answerSet:[Int])->[Bool]{
             result.append(true)
         } else{
             result.append(false)
+            _ = updateNote(isTest:1, testNum:testSet[i].testNum, type: testSet[i].type, number: testSet[i].number)
         }
     }
     return result
 }
 
-func checkNote(isTest:Int, testNum:Int, type:Int, number:Int){
-    
+func updateNote(isTest:Int, testNum:Int, type:Int, number:Int)->Bool{
+    let dbHelper = DBHelper()
+    return dbHelper.updateNote(isTest: isTest, testNum: testNum, type: type, number: number)
 }
 
 func isAllSolved(answerSet:[Int])->Bool{
@@ -193,7 +227,54 @@ func getScoreMessage(score:Int, questionCnt:Int) -> String{
 
 func getAvgScore()->Double{
     let dbHelper = DBHelper()
-    return dbHelper.getAvgScore()
+    let avg = dbHelper.getAvgScore()
+    return avg
 }
 
+func insertScore(currentScore:score)->Bool{
+    let dbHelper = DBHelper()
+    if dbHelper.insertScore(currentScore: currentScore) == true{
+        return true
+    } else{
+        return false
+    }
+}
 
+func getAllScore()->[score]{
+    let dbHelper = DBHelper()
+    return dbHelper.selectScore()
+}
+
+func getSecMembers(secHead:Int, scores:[score])->[score]{
+    let secMembers = scores.filter{$0.isTest == secHead}
+    return secMembers
+}
+
+func getMembers(secHead:Int, selectedIndex:Int)->Any{
+    if selectedIndex == 0{
+        return getNoteMembers(secHead: secHead)
+    } else{
+        return getBookmarkMembers(secHead: secHead)
+    }
+}
+
+func getNoteMembers(secHead:Int)->[note]{
+    let secMembers = getNotes().filter{$0.testNum == secHead}
+    return secMembers
+}
+
+func getBookmarkMembers(secHead:Int)->[bookmark]{
+    getBookmarks()
+    let setBookmarks = Set(bookmarks)
+    bookmarks = Array(setBookmarks)
+    let secMembers = bookmarks.filter{$0.testNum == secHead}
+    return secMembers
+}
+
+func getPassMessage()->String{
+    let scores = getAllScore()
+    let count = scores.filter{$0.isTest > 6}.count
+    let passed = scores.filter{$0.isTest > 6 && $0.score >= 60}.count
+    var msg = "총 \(count)회 기출 응시 중 \(passed)번 합격!"
+    return msg
+}
